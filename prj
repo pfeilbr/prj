@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+
+PROJECT_DIR=~/tmp
+CMD=$1
+
+GO_MODULE_BASE=github.com/pfeilbr
+
+case $CMD in
+    ls)
+        ls $PROJECT_DIR
+    ;;
+    go)
+        # create golang project
+        PROJECT_NAME=$2
+        MODULE_NAME="${GO_MODULE_BASE}/${PROJECT_NAME}"
+        
+        if [ -z "${PROJECT_NAME}" ]
+        then
+            echo please provide a project name
+            exit 1
+        fi
+
+        DIR="${PROJECT_DIR}/${PROJECT_NAME}"
+        if [ -d "${DIR}" ]
+        then
+            echo directory \"$DIR\" exists.  please choose a different project name
+            exit 1
+        fi
+        echo creating go project named \"$PROJECT_NAME\" at \"$DIR\"
+
+        mkdir -p "${DIR}"
+        pushd "${DIR}"
+
+cat << 'EOF' > README.md
+# PROJECT_NAME
+
+## Session
+
+```sh
+# run tests recursively on change
+fswatch -o . | xargs -n1 -I{} go test -v ./...
+
+# run main on change
+fswatch -o . | xargs -n1 -I{} go run main.go
+```
+EOF
+
+sed -i "" "s/PROJECT_NAME/${PROJECT_NAME}/g" README.md
+
+cat << 'EOF' > .gitignore
+build
+dist
+EOF
+
+cat << EOF > main.go
+package main
+
+import "fmt"
+
+func Hello() string {
+    return "Hello, world."
+}
+
+func main() {
+	fmt.Printf("%s", Hello())
+}
+EOF
+
+cat << EOF > main_test.go
+package main
+
+import "testing"
+
+func TestHello(t *testing.T) {
+    want := "Hello, world."
+    if got := Hello(); got != want {
+        t.Errorf("Hello() = %q, want %q", got, want)
+    }
+}
+EOF
+        go mod init "${MODULE_NAME}"
+        go test -v ./...
+        goreleaser init
+        git init
+        popd
+        code "${DIR}"
+    ;;
+esac
+
