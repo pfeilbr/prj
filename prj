@@ -5,6 +5,29 @@ CMD=$1
 
 GO_MODULE_BASE=github.com/pfeilbr
 
+display_usage() {
+    echo -e "project (prj) tool\n"
+    echo -e "USAGE"
+    echo -e "\t$ prj [COMMAND]\n"
+    echo -e "COMMANDS"
+    echo -e "\tprj ls"
+    echo -e "\tprj go PROJECT_NAME"
+}
+
+# if less than two arguments supplied, display usage 
+if [  $# -le 1 ] 
+then 
+    display_usage
+    exit 1
+fi 
+ 
+# check whether user had supplied -h or --help . If yes display usage 
+if [[ ( $# == "--help") ||  $# == "-h" ]] 
+then 
+    display_usage
+    exit 0
+fi 
+
 case $CMD in
     ls)
         ls $PROJECT_DIR

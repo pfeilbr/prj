@@ -16,3 +16,10 @@ prj ls
 # create new golang project
 prj go <project name>
 ```
+
+## Developing
+
+```sh
+# copy to ~/bin
+cp prj ~/bin
+```
