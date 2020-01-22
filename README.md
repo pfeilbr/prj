@@ -17,7 +17,7 @@ prj ls
 prj go <project name>
 ```
 
-## Developing
+## Installing
 
 ```sh
 # copy to ~/bin
