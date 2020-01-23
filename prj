@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PROJECT_DIR=~/tmp
+PROJECT_DIR=~/projects
 CMD=$1
 
 GO_MODULE_BASE=github.com/pfeilbr
@@ -15,7 +15,7 @@ display_usage() {
 }
 
 # if less than two arguments supplied, display usage 
-if [  $# -le 1 ] 
+if [  $# -le 0 ] 
 then 
     display_usage
     exit 1
