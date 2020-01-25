@@ -20,7 +20,5 @@ prj go <project name>
 ## Installing
 
 ```sh
-# copy to ~/bin
-cp prj ~/bin
 make install
 ```
