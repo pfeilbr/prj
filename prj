@@ -11,6 +11,7 @@ display_usage() {
     echo -e "\t$ prj [COMMAND]\n"
     echo -e "COMMANDS"
     echo -e "\tprj ls"
+    echo -e "\tprj open PROJECT_NAME"
     echo -e "\tprj go PROJECT_NAME"
 }
 
@@ -32,6 +33,17 @@ case $CMD in
     ls)
         ls $PROJECT_DIR
     ;;
+    open)
+        PROJECT_NAME=$2
+        DIR="${PROJECT_DIR}/${PROJECT_NAME}"
+        if [ -d "${DIR}" ]
+        then
+            code $DIR
+        else
+            echo directory \"$DIR\" does not exist.  please choose a different project name
+            exit 1
+        fi        
+    ;;    
     go)
         # create golang project
         PROJECT_NAME=$2
