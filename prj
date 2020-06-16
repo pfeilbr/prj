@@ -73,10 +73,10 @@ cat << 'EOF' > README.md
 
 ```sh
 # run tests recursively on change
-fswatch -o . | xargs -n1 -I{} go test -v ./...
+make watch-test
 
 # run main on change
-fswatch -o . | xargs -n1 -I{} go run main.go
+make watch-run
 ```
 EOF
 
@@ -85,6 +85,15 @@ sed -i "" "s/PROJECT_NAME/${PROJECT_NAME}/g" README.md
 cat << 'EOF' > .gitignore
 build
 dist
+EOF
+
+cat << 'EOF' > Makefile
+.PHONY: watch-test watch-run
+watch-test:
+	fswatch -o . | xargs -n1 -I{} go test -v ./...
+
+watch-run:
+	fswatch -o . | xargs -n1 -I{} go run main.go
 EOF
 
 cat << EOF > main.go
